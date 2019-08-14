@@ -1,0 +1,730 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3c.org/TR/1999/REC-html401-19991224/loose.dtd">
+<!-- saved from url=(0060)http://skpsun.blog.163.com/blog/static/27600552009121109154/ -->
+<HTML lang=zh xml:lang="zh" xmlns="http://www.w3.org/1999/xhtml"><HEAD><TITLE>Linux下的motion detection（最简单的办公室监控系统） - freetrain_sk的日志 - 网易博客</TITLE>
+<META http-equiv=content-type content=text/html;charset=gbk>
+<META http-equiv=content-style-type content=text/css>
+<META http-equiv=content-script-type content=text/javascript>
+<META content=neblog-1.0 name=version>
+<SCRIPT type=text/javascript> if(top!=window){top.location=location.href;} document.uniqueID!=document.uniqueID&&!!location.hash&&(location.hash=location.hash); document.domain = location.hostname.replace(/^.*\.([\w]+\.[\w]+)$/,'$1'); window.focus(); </SCRIPT>
+
+<META content=skpsun,freetrain_sk name=author>
+<META 
+content="Linux下的motion detection（最简单的办公室监控系统）,日志,freetrain_sk,sk,网易博客,网易,blog" 
+name=keywords>
+<META 
+content="Linux下的motion detection（最简单的办公室监控系统）,<span style=&quot;cursor:url('http://www.ik68.cn/cursor/mouse012.ani')&quot;>超级玛丽，哦耶！</span>,freetrain_sk的日志,freetrain_sk的网易博客,还远不是收获的季节。,我喜欢并习惯了对变化的东西保持着距离,这样才会知道什么是最不会被时间抛弃的准则。比如爱一个人,充满变数,我于是后退一步,静静的看着,直到看见真诚的感情。 " 
+name=description>
+<SCRIPT type=text/javascript> (function(){ var R=24,C=9,a=[]; for(var i=0;i<C;i++)for(var j=0;j<R;a.push('.icn0-'+i+j+'{background-position:'+(i>0?('-'+i*40+'px'):'0')+' '+(j>0?('-'+j*20+'px'):'0')+';}'),j++); document.write('<style type="text/css">'+a.join('')+'</st'+'yle>'); })(); </SCRIPT>
+<LINK 
+href="Linux下的motion detection（最简单的办公室监控系统） - freetrain_sk的日志 - 网易博客.files/c.css" 
+type=text/css rel=stylesheet><LINK id=blog-163-com-theme 
+href="Linux下的motion detection（最简单的办公室监控系统） - freetrain_sk的日志 - 网易博客.files/nb.css" 
+type=text/css rel=stylesheet><!--[if lte IE 6]>
+<STYLE type=text/css>HTML {
+	OVERFLOW: hidden; WIDTH: 100%; HEIGHT: 100%
+}
+BODY {
+	OVERFLOW: hidden; WIDTH: 100%; HEIGHT: 100%
+}
+#blog-163-com-ie6body {
+	OVERFLOW: hidden; WIDTH: 100%; HEIGHT: 100%
+}
+#blog-163-com-ie6body {
+	OVERFLOW-Y: scroll; OVERFLOW: auto
+}
+#blog-163-com {
+	BACKGROUND: none transparent scroll repeat 0% 0%
+}
+</STYLE>
+<![endif]-->
+<STYLE type=text/css>.m-3 .nbw-ryt .left {
+	FLOAT: left; OVERFLOW: hidden; WIDTH: 100%; MARGIN-RIGHT: -161px
+}
+.m-3 .nbw-ryt .left .lcnt {
+	PADDING-RIGHT: 10px; MARGIN-RIGHT: 160px
+}
+.m-3 .nbw-ryt .left .mcnt {
+	PADDING-LEFT: 10px
+}
+.m-3 .nbw-ryt .right {
+	FLOAT: right; WIDTH: 160px; POSITION: relative; TEXT-ALIGN: left
+}
+.m-3 .nbw-ryt .right .cnt {
+	PADDING-LEFT: 20px
+}
+.m-3 .nbw-ryt .right .uinfo IMG {
+	DISPLAY: block; MARGIN-BOTTOM: 5px; WIDTH: 60px; HEIGHT: 60px
+}
+.m-3 .nbw-ryt .right .intro {
+	MARGIN: 10px 0px; WIDTH: 100%; WORD-WRAP: break-word
+}
+.m-3 .nbw-ryt .right .ltt {
+	MARGIN: 35px 10px 0px 0px
+}
+.m-3 .nbw-ryt .right .blst {
+	BORDER-TOP-WIDTH: 0px; PADDING-RIGHT: 0px; PADDING-LEFT: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px; LIST-STYLE-TYPE: none; BORDER-RIGHT-WIDTH: 0px
+}
+.m-3 .nbw-ryt .right .blst LI {
+	WIDTH: 95%; LINE-HEIGHT: 20px; HEIGHT: 20px
+}
+.m-3 .nbw-ryt .right .blst .survey {
+	HEIGHT: 90px
+}
+.m-3 .nbw-ryt .right .acts {
+	MARGIN: 0px 0px 35px; LINE-HEIGHT: 20px; POSITION: relative
+}
+#blog-163-com .m-3 .phide {
+	DISPLAY: none
+}
+.m-3 .nbw-ryt .left .nbw-bitm {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 10px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px
+}
+.m-3 .nbw-ryt .left .nbw-bitm .title {
+	FONT-SIZE: 20px; MARGIN: 30px 0px 20px; FONT-FAMILY: '微软雅黑','黑体',Arial,Helvetica,Sans-Serif
+}
+.m-3 .nbw-ryt .left .nbw-bitm .tdep {
+	MARGIN-BOTTOM: 20px
+}
+.m-3 .nbw-ryt .left .nbw-bitm .tbar {
+	PADDING-RIGHT: 10px; PADDING-LEFT: 0px; PADDING-BOTTOM: 10px; MARGIN: 5px 0px; LINE-HEIGHT: 20px; PADDING-TOP: 10px; TEXT-ALIGN: right
+}
+.m-3 .nbw-ryt .left .nbw-bitm .bct {
+	PADDING-LEFT: 0px; FONT-SIZE: 14px
+}
+.m-3 .nbw-ryt .left .snl .pnb DIV {
+	LINE-HEIGHT: 20px; TEXT-ALIGN: left
+}
+.m-3 .nbw-ryt .cite {
+	MARGIN: 0px 0px 0px 50px; LINE-HEIGHT: 24px; TEXT-ALIGN: left
+}
+.m-3 .nbw-ryt .cite .close {
+	MARGIN: 20px 0px; TEXT-ALIGN: right
+}
+.m-3 .nbw-ryt .cite SPAN {
+	CURSOR: pointer
+}
+.m-3 .nbw-ryt .cite .nbw-act {
+	TEXT-ALIGN: center
+}
+.m-3 .nbw-ryt .cite .ads {
+	MARGIN-LEFT: 20px; WIDTH: 400px
+}
+.m-3 .nbw-ryt .cite .tbac {
+	BORDER-TOP-WIDTH: 0px; PADDING-RIGHT: 0px; PADDING-LEFT: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; PADDING-BOTTOM: 0px; MARGIN-LEFT: 60px; LINE-HEIGHT: 24px; PADDING-TOP: 0px; LIST-STYLE-TYPE: none; BORDER-RIGHT-WIDTH: 0px
+}
+.m-3 .nbw-ryt .cite .tbl {
+	OVERFLOW: hidden; WIDTH: 150px
+}
+.m-3 .nbw-ryt .cite .tbr {
+	MARGIN-LEFT: 20px; OVERFLOW: hidden
+}
+.m-3 .author {
+	TEXT-ALIGN: left
+}
+.m-3 .comment {
+	TEXT-ALIGN: left
+}
+.m-3 .author .nlogif {
+	MARGIN-LEFT: 3px; WIDTH: 150px; LINE-HEIGHT: 20px
+}
+.m-3 .author .nlogif .nbw-fce {
+	MARGIN: 0px 3px 0px 5px
+}
+.m-3 .author .nlogif .pright {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 5px; MARGIN: 0px; WIDTH: 85px; PADDING-TOP: 10px
+}
+.m-3 .nbw-ryt .right H4 {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; LINE-HEIGHT: 30px; PADDING-TOP: 0px
+}
+.m-3 .author H4 {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 10px; PADDING-BOTTOM: 0px; MARGIN: 0px; LINE-HEIGHT: 30px; PADDING-TOP: 0px
+}
+.m-3 .comment H4 {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 10px; PADDING-BOTTOM: 0px; MARGIN: 0px; LINE-HEIGHT: 30px; PADDING-TOP: 0px
+}
+.m-3 .author .cwd {
+	BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; TEXT-ALIGN: left; BORDER-RIGHT-WIDTH: 0px
+}
+.m-3 .author .cnt {
+	MARGIN: 10px 0px 10px -5px
+}
+.m-3 .author .nbw-fce {
+	MARGIN: 0px 11px
+}
+.m-3 .author .nbw-f50 {
+	WIDTH: 50px
+}
+.m-3 .nbw-ryt .left .top {
+	PADDING-BOTTOM: 5px; LINE-HEIGHT: 20px; POSITION: relative
+}
+.m-3 .nbw-ryt .left .top .ilft {
+	LEFT: 0px; POSITION: absolute; TOP: 0px
+}
+.m-3 .nbw-ryt .left .top .irgt {
+	RIGHT: 0px; POSITION: absolute; TOP: 0px
+}
+.m-3 .nbw-ryt .left .top .pleft {
+	MARGIN-LEFT: 10px; OVERFLOW: hidden; WIDTH: 40%; HEIGHT: 20px; TEXT-ALIGN: left
+}
+.m-3 .nbw-ryt .left .top .pright {
+	OVERFLOW: hidden; WIDTH: 40%; MARGIN-RIGHT: 10px; HEIGHT: 20px; TEXT-ALIGN: right
+}
+.m-3 .nbw-ryt .left .snl .pnb {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 10px; PADDING-BOTTOM: 10px; OVERFLOW: hidden; WIDTH: 100%; PADDING-TOP: 5px
+}
+.m-3 .comment H4 {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 10px; PADDING-BOTTOM: 0px; PADDING-TOP: 0px
+}
+.m-3 .comment .publish {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 5px; PADDING-BOTTOM: 10px; MARGIN: 10px 0px; PADDING-TOP: 0px; TEXT-ALIGN: left
+}
+.m-3 .comment .publish .nbw-fce {
+	PADDING-TOP: 0px
+}
+.m-3 .comment .publish .nbw-fce .cwd {
+	BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-RIGHT-WIDTH: 0px
+}
+.m-3 .comment .publish .redt {
+	MARGIN-LEFT: 65px
+}
+.m-3 .comment .nolog {
+	BORDER-RIGHT: #000 1px solid; PADDING-RIGHT: 0px; BORDER-TOP: #000 1px solid; PADDING-LEFT: 0px; PADDING-BOTTOM: 10px; BORDER-LEFT: #000 1px solid; LINE-HEIGHT: 40px; PADDING-TOP: 10px; BORDER-BOTTOM: #000 1px solid; HEIGHT: 20px; BACKGROUND-COLOR: #ffffe1; TEXT-ALIGN: center
+}
+.m-3 .comment .case {
+	PADDING-LEFT: 5px
+}
+.m-3 .comment .vgl {
+	MARGIN: 8px; WIDTH: 75%; TEXT-ALIGN: center
+}
+#blog-163-com .m-3 .comment .nbw-cmt .cnt {
+	WIDTH: 488px
+}
+#blog-163-com .m-3 .comment .nbw-cmt .nbw-cmt .cnt {
+	WIDTH: 444px
+}
+.m-3 .edt-cmt {
+	WIDTH: 444px
+}
+.m-3 .comment .publish .edt-cmt {
+	WIDTH: 488px
+}
+.m-3 .comment .publish .edt-cmt .zbcc {
+	DISPLAY: none
+}
+.m-3 .nbw-ryt .left .nbw-bitm .js-fs0 {
+	FONT-SIZE: 150%
+}
+.m-3 .nbw-ryt .left .nbw-bitm .js-fs0  {
+	FONT-SIZE: 150%
+}
+.m-3 .nbw-ryt .left .nbw-bitm .js-fs1 {
+	FONT-SIZE: 130%
+}
+.m-3 .nbw-ryt .left .nbw-bitm .js-fs1  {
+	FONT-SIZE: 130%
+}
+.m-3 .nbw-ryt .left .nbw-bitm .js-fs2 {
+	
+}
+.m-3 .nbw-ryt .left .nbw-bitm .js-fs2  {
+	
+}
+.m-3 .js-fcurrent {
+	FONT-WEIGHT: bold; TEXT-DECORATION: none; font-color: #000
+}
+.m-3 .js-auto .right {
+	DISPLAY: none
+}
+.m-3 .js-fix .right {
+	DISPLAY: none
+}
+.m-3 .js-auto .left {
+	FLOAT: none; MARGIN: 0px auto
+}
+.m-3 .js-fix .left {
+	FLOAT: none; MARGIN: 0px auto
+}
+.m-3 .js-fix .left {
+	WIDTH: 760px
+}
+.m-3 .js-auto .left .lcnt {
+	BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; MARGIN-RIGHT: 0px; BORDER-RIGHT-WIDTH: 0px
+}
+.m-3 .js-fix .left .lcnt {
+	BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; MARGIN-RIGHT: 0px; BORDER-RIGHT-WIDTH: 0px
+}
+.m-3 .nbw-bitm .rdif {
+	LINE-HEIGHT: 24px; HEIGHT: 24px
+}
+.m-3 .nbw-bitm .rdif .pnt {
+	LINE-HEIGHT: 24px; MARGIN-RIGHT: 10px; HEIGHT: 24px
+}
+.m-3 .nbw-bitm .rdif .pclass {
+	VERTICAL-ALIGN: middle; WIDTH: 57px; HEIGHT: 22px
+}
+.m-3 .nbw-bitm .rdif .rdct {
+	DISPLAY: inline-block
+}
+.m-3 .snl .rdcnt {
+	PADDING-RIGHT: 5px; PADDING-LEFT: 5px; PADDING-BOTTOM: 5px; PADDING-TOP: 5px; TEXT-ALIGN: left
+}
+.m-3 .snl .rdcnt .nbw-fce {
+	MARGIN: 0px 5px
+}
+.m-3 .snl .rdcnt P {
+	MARGIN: 10px 0px
+}
+.m-3 .snl .rdcnt .rrb {
+	LINE-HEIGHT: 22px; LIST-STYLE-TYPE: none; HEIGHT: 22px
+}
+.m-3 .acts .iblock {
+	WIDTH: 18px
+}
+.m-3 .ns {
+	MARGIN: 0px 0px 0px 2px
+}
+.m-3 .cancel {
+	DISPLAY: none
+}
+.m-3 .js-hover .cancel {
+	DISPLAY: inline
+}
+.m-3 .follow:hover .cancel {
+	DISPLAY: inline
+}
+.m-3 .frd:hover .cancel {
+	DISPLAY: inline
+}
+.m-3 .follow {
+	MARGIN-LEFT: 2px
+}
+.m-3 .flw {
+	BORDER-RIGHT: #b7b7b7 1px solid; PADDING-RIGHT: 8px; BORDER-TOP: #b7b7b7 1px solid; PADDING-LEFT: 8px; BACKGROUND: #fefce4; PADDING-BOTTOM: 7px; BORDER-LEFT: #b7b7b7 1px solid; COLOR: #000; PADDING-TOP: 7px; BORDER-BOTTOM: #b7b7b7 1px solid
+}
+.m-3 .acts .flw .iblock {
+	WIDTH: 20px
+}
+</STYLE>
+
+<META content="MSHTML 6.00.2900.5921" name=GENERATOR></HEAD>
+<BODY class="nb-body nb-inr" id=blog-163-com><!--[if lte IE 6]>
+<DIV class=nb-body id=blog-163-com-ie6body><![endif]-->
+<DIV class="nb-wrap wsy" id=blog-163-com-main>
+<DIV class="nb-are nb-top">
+<DIV class="wkg h" id=blog-163-com-banner>
+<DIV class=t>
+<H1 class="n c"><SPAN class="ztag pre">sk</SPAN></H1>
+<P class="d c"><SPAN class="ztag pre">还远不是收获的季节。</SPAN></P></DIV>
+<DIV class="f h ztag"></DIV><A class=x hideFocus 
+href="http://skpsun.blog.163.com/blog/static/27600552009121109154/#" 
+target=_blank><SPAN class="xx ztag"></SPAN></A></DIV></DIV>
+<DIV class="nb-are nb-nav">
+<DIV class=wkg>
+<DIV class="c h">
+<H2>导航</H2>
+<UL class="noul clearfix">
+  <LI class=w><A class="i fc01 h" hideFocus 
+  href="http://skpsun.blog.163.com/">首页</A> </LI>
+  <LI class="w selected"><A class="i fc01 h" hideFocus 
+  href="http://skpsun.blog.163.com/blog/">日志</A> </LI>
+  <LI class=w><A class="i fc01 h" hideFocus 
+  href="http://skpsun.blog.163.com/album/">相册</A> </LI>
+  <LI class=w><A class="i fc01 h" hideFocus 
+  href="http://skpsun.blog.163.com/music/">音乐</A> </LI>
+  <LI class=w><A class="i fc01 h" hideFocus 
+  href="http://skpsun.blog.163.com/collection/">收藏</A> </LI>
+  <LI class=w><A class="i fc01 h" hideFocus 
+  href="http://skpsun.blog.163.com/friends/">博友</A> </LI>
+  <LI class=w><A class="i fc01 h" hideFocus 
+  href="http://skpsun.blog.163.com/profile/">关于我</A> </LI></UL>　 </DIV>
+<DIV class="l h"></DIV>
+<DIV class="r h"></DIV></DIV></DIV>
+<DIV class="nb-are nb-smt">
+<DIV class="wkg h space">
+<DIV class="l h"></DIV>
+<DIV class="r h"></DIV>
+<DIV class="c h"></DIV></DIV></DIV>
+<DIV class="nb-are nb-cnt">
+<DIV class=wkg>
+<DIV class="c wc h clearfix " id=blog-163-com-container>
+<DIV class="nb-mdl lcr m-3" id=-3>
+<DIV class="nb-mt lcr th fc02">
+<DIV class="c tc th lcr">
+<H2 class="thide nb-jsc">日志</H2></DIV>
+<DIV class="r tm th nb-jsc"></DIV>
+<DIV class="l tl th"></DIV>
+<DIV class="r tr th"></DIV></DIV>
+<DIV class="nb-mc lcr">
+<DIV class="c cc lcr nb-jsc">
+<DIV class="nbw-ryt ztag clearfix ">
+<DIV class="right bdwl bds0 bdc0">
+<DIV class="cnt ztag"></DIV></DIV>
+<DIV class=left>
+<DIV class="lcnt bdwr bds0 bdc0 ">
+<DIV class="top fc03 bdwb bdc0 bds2 clearfix" id=$_divTopLink><SPAN 
+class="ilft iblock icn0 icn0-620">&nbsp;</SPAN> 
+<DIV class="pleft thide"><A class=m2a 
+href="http://skpsun.blog.163.com/blog/static/276005520091209643605/">Debian 
+Linux下装摄像头驱动（Non-zero status (-18) in isoc。。问题）</A></DIV><SPAN 
+class="irgt iblock icn0 icn0-619">&nbsp;</SPAN> 
+<DIV class="pright thide"><A class=m2a 
+href="http://skpsun.blog.163.com/blog/static/2760055200912812051910/">关于两个观点的一点呻吟</A></DIV></DIV>
+<DIV class=mcnt>
+<DIV class="nbw-bitm bdwb bds2 bdc0">
+<H3 class="title pre fs1">Linux下的motion detection（最简单的办公室监控系统）</H3>
+<P class="tdep clearfix nbw-act fc06"><SPAN class=pleft><A class="fc03 m2a" 
+href="http://skpsun.blog.163.com/blog/#m=0&amp;t=1&amp;c=fks_094064083095082065092074084068082086081070081">学习</A> 
+<SPAN class=sep>2009-02-21 01:00:09</SPAN> <SPAN class=sep>阅读<SPAN 
+id=$_spanReadCount>344</SPAN></SPAN> <SPAN class=sep>评论<SPAN 
+id=$_spanCommentCount>1</SPAN></SPAN> </SPAN><SPAN 
+class="pright fc07 ztag">字号：<SPAN class="ul sep fc04">大</SPAN><SPAN 
+class="ul sep fc04">中</SPAN><SPAN class="sep ul fc04">小</SPAN></SPAN> </P>
+<DIV class="bct fc05 fc11 nbw-blog ztag">
+<DIV style="CURSOR: url('http://www.ik68.cn/cursor/mouse012.ani')">
+<P style="TEXT-INDENT: 2em">&nbsp;</P>
+<P 
+style="TEXT-INDENT: 2em">这篇结合前面三篇（关于Linux内核的，关于motion介绍的，关于安装usb摄像头驱动的），介绍了一个Linux下，用来探测运动的软件包motion，它可以按照需要进行配置。实现在摄像头静止情况下，对视场的监控。</P>
+<P style="TEXT-INDENT: 2em">所需硬件，一台pc，一个普通usb摄像头。然后在Windows 
+XP里装一个虚拟机，下一个虚拟机下用的Linux（见前篇motion介绍的blog），就可以应用motion了。本文里讲motion设置为，一检测到视场里有运动，就向设定邮箱发送监控avi视频。我曾经插着USB摄像头，启动motion，然后运行了一晚上。本想拍下同事早晨来时的视频，结果早晨我来了检查邮箱，除了我走和来时的样子，竟然还有清洁工大妈的样子，一看时间是早晨5:30，这个意外发现解决了我一直以来的一个疑问，到底是谁，什么时间来打扫办公室的。而整晚上发送监控邮件共12封，拍到的视频总大小不到10Mb，确实是一个简单易行的好工具。</P>
+<P style="TEXT-INDENT: 2em">首先，确保USB摄像头能在Linux下正常工作。</P>
+<P style="TEXT-INDENT: 2em">在Debian下安装Motion也是相当的简单。<A 
+href="http://www.debian.com/distrib/packages">http://www.debian.com/distrib/packages</A>里有提供motion的安装包，所以直接在终端下运行</P>
+<P style="TEXT-INDENT: 2em"># apt-get install motion</P>
+<P 
+style="TEXT-INDENT: 2em">装好后，根据安装提示，修改/etc/motion/里的相关文件名，得到这个文件/etc/motion/motion.conf。motion.conf就是motion程序与操作者的接口文件。通过修改motion.conf里的配置，来控制motion的运行。当在终端里运行#motion时，会先在终端所示当前目录下寻找motion.conf，没有找到时，去寻找/etc/motion/motion.conf。所以，我把这个文件copy一份，放到了/root下，然后每次都进root里运行motion。</P>
+<P style="TEXT-INDENT: 2em">运行前，先修改这个文件/root/motion.conf，我的motion.conf</P>
+<P style="TEXT-INDENT: 2em"># Minimal motion example config file provided by 
+the</P>
+<P style="TEXT-INDENT: 2em"># Debian motion package - for basic webcam 
+operation.</P>
+<P style="TEXT-INDENT: 2em">#</P>
+<P style="TEXT-INDENT: 2em"># You most certainly want to investigate</P>
+<P style="TEXT-INDENT: 2em"># 
+/usr/share/doc/motion/examples/motion-dist.conf.gz</P>
+<P style="TEXT-INDENT: 2em"># for further configuration options. Also, refer to 
+the</P>
+<P style="TEXT-INDENT: 2em"># motion man page and 
+/usr/share/doc/motion/motion_guide.html</P>
+<P style="TEXT-INDENT: 2em"># for detailed information on configuration 
+options.</P>
+<P style="TEXT-INDENT: 2em">&nbsp;</P>
+<P style="TEXT-INDENT: 2em">daemon off</P>
+<P style="TEXT-INDENT: 2em">quiet on</P>
+<P style="TEXT-INDENT: 2em">locate on</P>
+<P style="TEXT-INDENT: 2em">&nbsp;</P>
+<P style="TEXT-INDENT: 2em"># You may very well need to change this (check with 
+'dmesg'</P>
+<P style="TEXT-INDENT: 2em"># after plugging in your webcam).</P>
+<P style="TEXT-INDENT: 2em">videodevice /dev/video0</P>
+<P style="TEXT-INDENT: 2em">&nbsp;</P>
+<P style="TEXT-INDENT: 2em"># Image size in pixels (valid range is camera 
+dependent).</P>
+<P style="TEXT-INDENT: 2em">width 320</P>
+<P style="TEXT-INDENT: 2em">height 240</P>
+<P style="TEXT-INDENT: 2em">&nbsp;</P>
+<P style="TEXT-INDENT: 2em">framerate 25</P>
+<P style="TEXT-INDENT: 2em">quality 85</P>
+<P style="TEXT-INDENT: 2em">auto_brightness off</P>
+<P style="TEXT-INDENT: 2em">&nbsp;</P>
+<P style="TEXT-INDENT: 2em"># General threshold level and noise threshold</P>
+<P style="TEXT-INDENT: 2em"># level (for distinguishing between noise and 
+motion).</P>
+<P style="TEXT-INDENT: 2em">threshold_tune off</P>
+<P style="TEXT-INDENT: 2em">threshold 4500</P>
+<P style="TEXT-INDENT: 2em">noise_level 64</P>
+<P style="TEXT-INDENT: 2em">&nbsp;</P>
+<P style="TEXT-INDENT: 2em"># Initial brightness, contrast, hue (NTSC), and 
+saturation.</P>
+<P style="TEXT-INDENT: 2em"># 0 = disabled (valid range 0-255).</P>
+<P style="TEXT-INDENT: 2em">brightness 0</P>
+<P style="TEXT-INDENT: 2em">contrast 0</P>
+<P style="TEXT-INDENT: 2em">saturation 0</P>
+<P style="TEXT-INDENT: 2em">hue 0</P>
+<P style="TEXT-INDENT: 2em">&nbsp;</P>
+<P style="TEXT-INDENT: 2em"># Encode movies in real-time (install ffmpeg before 
+enabling).</P>
+<P style="TEXT-INDENT: 2em">ffmpeg_cap_new on</P>
+<P style="TEXT-INDENT: 2em">&nbsp;</P>
+<P style="TEXT-INDENT: 2em"># Codec to be used by ffmpeg for the video 
+compression.</P>
+<P style="TEXT-INDENT: 2em"># Supported formats: mpeg4, msmpeg4.</P>
+<P style="TEXT-INDENT: 2em">ffmpeg_video_codec msmpeg4</P>
+<P style="TEXT-INDENT: 2em">&nbsp;</P>
+<P style="TEXT-INDENT: 2em"># Target base directory for pictures and films (you 
+may need</P>
+<P style="TEXT-INDENT: 2em"># to change this (or change its permissions) 
+depending on</P>
+<P style="TEXT-INDENT: 2em"># which system user runs motion).</P>
+<P style="TEXT-INDENT: 2em">target_dir /root/motion/snapshots</P>
+<P style="TEXT-INDENT: 2em">&nbsp;</P>
+<P style="TEXT-INDENT: 2em"># Define a port number (e.g. 8000) to enable the 
+mini-http server.</P>
+<P style="TEXT-INDENT: 2em"># 0 = disabled.</P>
+<P style="TEXT-INDENT: 2em">webcam_port 8081</P>
+<P style="TEXT-INDENT: 2em">&nbsp;</P>
+<P style="TEXT-INDENT: 2em"># Set to 'off' to allow anybody (not just localhost) 
+to view the</P>
+<P style="TEXT-INDENT: 2em"># webcam via the mini-http server 
+(http://hostname:port).</P>
+<P style="TEXT-INDENT: 2em">webcam_localhost off</P>
+<P style="TEXT-INDENT: 2em">&nbsp;</P>
+<P style="TEXT-INDENT: 2em">snapshot_interval 1</P>
+<P style="TEXT-INDENT: 2em">snapshot_filename snapshot </P>
+<P style="TEXT-INDENT: 2em">&nbsp;</P>
+<P style="TEXT-INDENT: 2em">webcam_quality 50</P>
+<P style="TEXT-INDENT: 2em">webcam_maxrate 8</P>
+<P style="TEXT-INDENT: 2em">&nbsp;</P>
+<P style="TEXT-INDENT: 2em">on_event_start /root/motion/on_motion_detected</P>
+<P style="TEXT-INDENT: 2em">on_event_end /root/motion/on_motion_end</P>
+<P style="TEXT-INDENT: 2em">gap 10</P>
+<P style="TEXT-INDENT: 2em">关于这些配置的具体意义，参见motion官方wiki <A 
+href="http://www.lavrsen.dk/twiki/bin/view/Motion/WebHome">http://www.lavrsen.dk/twiki/bin/view/Motion/WebHome</A>中的Config 
+options。这里，我只对其中几个解释一下。</P>
+<P style="TEXT-INDENT: 2em">daemon 
+off，关掉deamon模式。最好这项还是选off，否则运行motion后，就会直接在后台运行，需要用top命令查看出motion的进程号（pid），然后再手动kill掉这个进程。</P>
+<P style="TEXT-INDENT: 2em">locate on设置探测到图像中有运动时，把运动区域用矩形框起来。</P>
+<P style="TEXT-INDENT: 2em">videodevice /dev/video0 
+设置加载USB摄像头的设备，一般都是这个video0，当使用network 
+webcam时，需要设置netcam_url，此时，videodevice选项自动失效。</P>
+<P style="TEXT-INDENT: 2em">threshold_tune off设置是否使用motion 
+detection阈值自动调节。当设置为on时，下一个设置threshold 
+4500自动失效。设置off时，可以由threshold指定当探测到多少像素变化时，判断为图像中有运动。</P>
+<P style="TEXT-INDENT: 2em">ffmpeg_cap_new on这个选项是指，在detect到运动时，用视频纪录下来。</P>
+<P style="TEXT-INDENT: 2em">ffmpeg_video_codec msmpeg4 设定视频的编码器</P>
+<P style="TEXT-INDENT: 2em">target_dir 
+/root/motion/snapshots当探测到运动时，图片和视频的保存路径，默认时为/var/lib/motion/snapshots。</P>
+<P style="TEXT-INDENT: 2em">snapshot_interval 
+1设定自动采集图片的周期，当有运动被检测到时，采集频率会自动变高。</P>
+<P style="TEXT-INDENT: 2em">on_event_start 
+/root/motion/on_motion_detected当探测到运动时，执行所设定目录里的文件，这里设定为文件/root/motion/on_motion_detected，该文件可以是一个程序，可以是一段脚本，只要是能执行的就可以。</P>
+<P style="TEXT-INDENT: 2em">on_event_end 
+/root/motion/on_motion_end当on_event_start开始后，即检测到运动后， 
+若有连续10秒不再能检测到运动时，执行该选项设定的文件。10秒参数是由以下gap 10语句设置而来。</P>
+<P style="TEXT-INDENT: 2em">以上两个设置参见<A 
+href="http://www.lavrsen.dk/twiki/bin/view/Motion/ExternalCommands">http://www.lavrsen.dk/twiki/bin/view/Motion/ExternalCommands</A></P>
+<P style="TEXT-INDENT: 2em">gap 
+10设置，在探测到运动后，多长时间没有运动的话就触发运动结束指令on_event_end。</P>
+<P style="TEXT-INDENT: 2em">这里我的on_motion_detected和on_motion_end都是shell脚本。</P>
+<P 
+style="TEXT-INDENT: 2em">on_motion_detected脚本的作用是，记录下探测到运动时的时间，即拍摄的监控视频文件的文件名的一部分。把这个时间存到/root/tmp/videotime文件中。on_motion_detected文件如下：</P>
+<P style="TEXT-INDENT: 2em">#!/bin/bash</P>
+<P style="TEXT-INDENT: 2em">echo 
+"111111111111111on_motion_detected1111111111111111"</P>
+<P style="TEXT-INDENT: 2em">DATE=$(date +"%Y%m%d%H%M%S")</P>
+<P style="TEXT-INDENT: 2em">#DATE=$(date -d "-1 sec" +%Y%m%d%H%M%S)</P>
+<P style="TEXT-INDENT: 2em">&nbsp;</P>
+<P style="TEXT-INDENT: 2em">ALARM_TIME="/root/tmp/videotime"</P>
+<P style="TEXT-INDENT: 2em">echo "$DATE" &gt; $ALARM_TIME</P>
+<P 
+style="TEXT-INDENT: 2em">而on_motion_end就是用来发送邮件的。它会在检测到的运动结束后，讲拍下来的运动的avi视频发送到指定邮箱里。avi视频的文件名为一个序号+检测到运动的时间+.avi，而检测到运动的时间，根据on_motion_detected脚本，存在/root/tmp/videotime里，理论上说只要从文件里读出时间，然后补全文件名（该序号由*号替代），便能发出邮件。但是，由于程序运动效率原因，有时会出现，记录的时间同开始录avi的时间差1秒的情况，虽然只有一秒，但是足以导致找不到avi文件，无法正确发出监控视频。由于我们设置了gap为10，即10秒内最多只有一个视频。所以，解决这个问题的办法可以是，去寻找videotime中所记录时间及其上一秒，连续两秒的视频，找到哪个发哪个。当然，结果永远是只会找到一个。on_motion_end这个shell脚本文件如下：</P>
+<P style="TEXT-INDENT: 2em">#!/bin/bash</P>
+<P style="TEXT-INDENT: 2em">echo 
+"111111111111111on_motion_end1111111111111111"</P>
+<P style="TEXT-INDENT: 2em">DIRC="/root/motion/snapshots/"</P>
+<P style="TEXT-INDENT: 2em">VIDEOTIME="/root/tmp/videotime"</P>
+<P style="TEXT-INDENT: 2em">TIME=$(cat $VIDEOTIME)</P>
+<P style="TEXT-INDENT: 2em">ALARM_EMAIL="/root/tmp/myalarm.txt"</P>
+<P style="TEXT-INDENT: 2em">&nbsp;</P>
+<P style="TEXT-INDENT: 2em">echo "Subject: Motion detected - $TIME - $DIRC" &gt; 
+$ALARM_EMAIL</P>
+<P style="TEXT-INDENT: 2em">echo ""&gt;&gt; $ALARM_EMAIL</P>
+<P style="TEXT-INDENT: 2em">echo "Motion detected - check 
+$TIME.avi"&gt;&gt;$ALARM_EMAIL</P>
+<P style="TEXT-INDENT: 2em">MAILBODY=$(cat $ALARM_EMAIL)</P>
+<P style="TEXT-INDENT: 2em">&nbsp;</P>
+<P style="TEXT-INDENT: 2em">#first trying of sending the avi video</P>
+<P style="TEXT-INDENT: 2em">echo $MAILBODY | mutt -s $TIME -a $DIRC*$TIME.avi 
+skpsun@163.com</P>
+<P style="TEXT-INDENT: 2em">&nbsp;</P>
+<P style="TEXT-INDENT: 2em">#second trying of sending the avi video</P>
+<P style="TEXT-INDENT: 2em">TIME=$(expr $TIME - 1)</P>
+<P style="TEXT-INDENT: 2em">echo $MAILBODY | mutt -s $TIME -a $DIRC*$TIME.avi 
+skpsun@163.com</P>
+<P 
+style="TEXT-INDENT: 2em">当然，在能成功自动发送邮件前，先要确认是否正确安装配置了mailx和ssmtp。否则，需要先安装这两个程序。</P>
+<P style="TEXT-INDENT: 2em"># apt-get install mailx ssmtp</P>
+<P style="TEXT-INDENT: 2em">然后在/etc/ssmtp/ssmtp.conf里如下进行配置：</P>
+<P style="TEXT-INDENT: 2em">In /etc/ssmtp/ssmtp.conf, set the following:</P>
+<P style="TEXT-INDENT: 2em">root=youraccount@gmail.com</P>
+<P style="TEXT-INDENT: 2em">mailhub=smtp.gmail.com:587</P>
+<P style="TEXT-INDENT: 2em">rewriteDomain=</P>
+<P style="TEXT-INDENT: 2em">hostname=smtp.gmail.com:587</P>
+<P style="TEXT-INDENT: 2em">UseSTARTTLS=YES</P>
+<P style="TEXT-INDENT: 2em">AuthUser=youraccount</P>
+<P style="TEXT-INDENT: 2em">AuthPass=yourpasword</P>
+<P style="TEXT-INDENT: 2em">FromLineOverride=YES # optional</P>
+<P style="TEXT-INDENT: 2em">In /etc/ssmtp/revaliases:</P>
+<P style="TEXT-INDENT: 2em">root:youraccount@gmail.com:smtp.gmail.com:587</P>
+<P 
+style="TEXT-INDENT: 2em">mainuser:youraccount@gmail.com:smtp.gmail.com:587</P>
+<P style="TEXT-INDENT: 2em">并在命令行里输入</P>
+<P style="TEXT-INDENT: 2em"># mail 
+youraccount@gmail.com进行测试，写完邮件正文后按ctrl+D发送，详见</P>
+<P style="TEXT-INDENT: 2em"><A 
+href="http://www.kedy.cn/show-378-1.html">http://www.kedy.cn/show-378-1.html</A></P>
+<P style="TEXT-INDENT: 2em">&nbsp;监控到清洁工大妈的视频截图</P>
+<P style="TEXT-INDENT: 2em"><A 
+href="Linux下的motion detection（最简单的办公室监控系统） - freetrain_sk的日志 - 网易博客.files/1987494810555304629.jpg" 
+target=_blank><IMG 
+title="Linux下的motion detection（最简单的办公室监控系统） - freetrain_sk - sk" 
+style="DISPLAY: block; TEXT-ALIGN: center" 
+alt="Linux下的motion detection（最简单的办公室监控系统） - freetrain_sk - sk" 
+src="Linux下的motion detection（最简单的办公室监控系统） - freetrain_sk的日志 - 网易博客.files/1987494810555304629.jpg"></A><A 
+href="http://img.blog.163.com/photo/b97_PIk9JWJBwapFCIPjUw==/5405163977775144985.jpg" 
+target=_blank></A></P>
+<P style="TEXT-INDENT: 2em">&nbsp;</P>
+<P style="TEXT-INDENT: 2em">&nbsp;</P>
+<P style="TEXT-INDENT: 2em">Reference webpages:</P>
+<P style="TEXT-INDENT: 2em">CLI Magic: Getting into Motion: <A 
+href="http://www.linux.com/feature/114118">http://www.linux.com/feature/114118</A></P>
+<P style="TEXT-INDENT: 2em">HOWTO Gmail and sSMTP: <A 
+href="http://www.kedy.cn/show-378-1.html">http://www.kedy.cn/show-378-1.html</A></P>
+<P style="TEXT-INDENT: 2em">send email with attachment: <A 
+href="http://logjiang.itpub.net/post/38081/473118">http://logjiang.itpub.net/post/38081/473118</A></P>
+<P style="TEXT-INDENT: 2em">Motion external commads: <A 
+href="http://www.lavrsen.dk/twiki/bin/view/Motion/ExternalCommands">http://www.lavrsen.dk/twiki/bin/view/Motion/ExternalCommands</A></P>
+<P style="TEXT-INDENT: 2em">linux中怎么才能获得下一秒的时间: <A 
+href="http://www.9php.com/FAQ/cxsjl/shell/2009/01/3120364137960.html">http://www.9php.com/FAQ/cxsjl/shell/2009/01/3120364137960.html</A></P>
+<P style="TEXT-INDENT: 2em">linux date 命令详解: <A 
+href="http://www.admin99.net/read.php/188.htm">http://www.admin99.net/read.php/188.htm</A></P>
+<P style="TEXT-INDENT: 2em">linux下date命令用法: <A 
+href="http://pds911.itpub.net/post/782/454526">http://pds911.itpub.net/post/782/454526</A></P>
+<P style="TEXT-INDENT: 2em">shell 十三問?: <A 
+href="http://bbs.chinaunix.net/viewthread.php?tid=218853">http://bbs.chinaunix.net/viewthread.php?tid=218853</A></P>
+<P style="TEXT-INDENT: 2em">[精华] 跟我一起写 Makefile: <A 
+href="http://www.chinaunix.net/jh/23/408225.html">http://www.chinaunix.net/jh/23/408225.html</A></P>
+<P style="TEXT-INDENT: 2em"><A 
+href="http://www.stlchina.org/twiki/bin/view.pl/ScriptProgram/LearnMakefile">http://www.stlchina.org/twiki/bin/view.pl/ScriptProgram/LearnMakefile</A></P>
+<P style="TEXT-INDENT: 2em">&nbsp;</P></DIV></DIV>
+<DIV class="nbw-act tbar fc03 clearfix">
+<DIV class="pleft rdif"><SPAN class="pnt pleft" id=$_spanRecommend><IMG 
+class=pclass 
+src="Linux下的motion detection（最简单的办公室监控系统） - freetrain_sk的日志 - 网易博客.files/tuijian.png"></SPAN> 
+<SPAN class="rdct phide" id=$_spanShowRecommend><SPAN 
+class="pleft ul fc03">有<SPAN id=$_spanRecommendCount>0</SPAN>人推荐</SPAN><SPAN 
+class="pleft iblock icn0 icn0-722 nbw-tgl1">&nbsp;</SPAN><SPAN 
+class="pleft iblock icn0 icn0-621 nbw-tgl0">&nbsp;</SPAN> </SPAN></DIV>
+<DIV class=pright><SPAN class=fc07>阅读(<SPAN 
+id=$_spaniReadCount>344</SPAN>)</SPAN><SPAN class="sep fc07">|</SPAN> <SPAN 
+class=fc07>评论(<SPAN id=$_spaniCommentCount>1</SPAN>)</SPAN><SPAN 
+class="sep fc07">|</SPAN> <SPAN class=m2a id=$_spanCite>引用(<SPAN 
+id=$_spanCiteCount>0</SPAN>)</SPAN> <SPAN class="sep fc07">|</SPAN><SPAN 
+class=m2a id=$_spanReport>举报</SPAN> </DIV></DIV></DIV>
+<DIV class="snl ztag">
+<DIV class="phide bdwb bds2 bdc0 rdcnt" id=$_divRecommendContent></DIV>
+<DIV class="pnb thide" id=$_divMidLink>
+<DIV><A class="fc03 m2a" 
+href="http://skpsun.blog.163.com/blog/static/276005520091209643605/">上一篇：Debian 
+Linux下装摄像头驱动（Non-zero status (-18) in isoc。。问题）</A></DIV>
+<DIV><A class="fc03 m2a" 
+href="http://skpsun.blog.163.com/blog/static/2760055200912812051910/">下一篇：关于两个观点的一点呻吟</A></DIV></DIV>
+<DIV class=author>
+<H4 class="bdwb bds2 bdc0 fc07 fs0">最近读者</H4>
+<DIV class="cnt ztag clearfix"></DIV></DIV>
+<DIV class=comment>
+<H4 class="bdwb bds2 bdc0 fc07 fs0">评论</H4>
+<DIV class=ztag></DIV></DIV></DIV>
+<DIV class="cite ztag fc03"></DIV></DIV></DIV></DIV></DIV>
+<DIV class="phide nb-init"><TEXTAREA name=js> this.p={ m:2, b:2, id:'fks_085075092086088064082080081095086081087067084083083', blogTitle:'Linux下的motion detection（最简单的办公室监控系统）', blogUrl:'blog/static/27600552009121109154', isPublished:1, istop:false, type:0, modifyTime:1235150388721, permalink:'blog/static/27600552009121109154', commentCount:1, mainCommentCount:1, recommendCount:0, friendstatus:'none', followstatus:'unFollow', pubSucc:'' } </TEXTAREA> 
+<TEXTAREA id=m-3-jst-1 name=jst> {list a as x} {if !!x} &lt;div class="iblock nbw-fce nbw-f40"&gt; &lt;a class="fc03 noul" target="_blank" hidefocus="true" href="http://blog.163.com/${x.visitorName}/"&gt; &lt;img alt="${x.visitorNickname|escape}" onerror="location.f40" class="cwd bdwa bdc0" src="${fn1(x.visitorName)}"/&gt; &lt;/a&gt; &lt;div class="cwd thide"&gt; &lt;a class="fc03 m2a" target="_blank" hidefocus="true" href="http://blog.163.com/${x.visitorName}/"&gt; ${fn(x.visitorNickname,6)|escape} &lt;/a&gt; &lt;/div&gt; &lt;/div&gt; {/if} {/list} </TEXTAREA> 
+<TEXTAREA id=m-3-jst-2 name=jst> {if !!a} &lt;a href="http://blog.163.com/${a.userName}/"&gt;&lt;img class="bdwa bdc0 pnt" onerror="location.f60" src="${fn1(a.userName)}"/&gt;&lt;/a&gt; &lt;a class="fc03 m2a" href="http://blog.163.com/${a.userName}/"&gt;${fn(a.nickname,8)|escape}&lt;/a&gt; &lt;div class="intro fc05"&gt;${a.selfIntro|escape}&lt;/div&gt; &lt;div class="acts ztag"&gt;&lt;/div&gt; {/if} </TEXTAREA> 
+&lt;#--最新日志--&gt; <TEXTAREA id=m-3-jst-3 name=jst> {list a as x} {if !!x} &lt;li class="thide"&gt;&lt;a class="fc03 m2a" href="${furl()}${x.permalink}/"&gt;${fn(x.title,26)|escape}&lt;/a&gt;&lt;/li&gt; {/if} {/list} </TEXTAREA> 
+&lt;#--推荐日志--&gt; <TEXTAREA id=m-3-jst-4 name=jst> &lt;p class="fc06"&gt;推荐过这篇日志的人：&lt;/p&gt; &lt;div&gt; {list a as x} {if !!x} &lt;div class="iblock nbw-fce nbw-f40"&gt; &lt;a class="fc03 noul" target="_blank" hidefocus="true" href="http://blog.163.com/${x.recommenderName}/"&gt; &lt;img alt="${x.recommenderNickname}" onerror="location.f40" class="cwd bdwa bdc0" src="${fn1(x.recommenderName)}"/&gt; &lt;/a&gt; &lt;div class="cwd thide"&gt; &lt;a class="fc03 m2a" target="_blank" hidefocus="true" href="http://blog.163.com/${x.recommenderName}/"&gt; ${fn(x.recommenderNickname,6)|escape} &lt;/a&gt; &lt;/div&gt; &lt;/div&gt; {/if} {/list} &lt;/div&gt; {if !!b&amp;&amp;b.length&gt;0} &lt;p class="fc06"&gt;他们还推荐了：&lt;/p&gt; &lt;ul&gt; {list b as y} {if !!y} &lt;li class="rrb"&gt;&lt;span class="iblock"&gt;·&lt;/span&gt;&lt;a class="fc03 m2a" target="_blank" href="http://blog.163.com/${y.recommendBlogPermalink}/"&gt;${y.recommendBlogTitle}&lt;/a&gt;&lt;/li&gt; {/if} {/list} &lt;/ul&gt; {/if} </TEXTAREA> 
+&lt;#--引用记录--&gt; <TEXTAREA id=m-3-jst-5 name=jst> &lt;span class="pleft fc07"&gt;引用记录：&lt;/span&gt; &lt;ul class="tbac"&gt; {list d as x} &lt;li class="clearfix"&gt; &lt;span class="pleft iblock"&gt;·&lt;/span&gt; &lt;div class="tbl thide pleft"&gt;&lt;span&gt;&lt;a target="_blank" class="fc07 m2a" href="${x.referBlogUrl}"&gt;${x.referBlogTitle}&lt;/a&gt;&lt;/span&gt;&lt;/div&gt; &lt;div class="tbr pleft"&gt;&lt;span&gt;&lt;a target="_blank" class="fc07 m2a" href="${x.referHomePage}"&gt;${x.referUserName}&lt;/a&gt;&lt;/span&gt;&lt;/div&gt; &lt;/li&gt; {/list} &lt;/ul&gt; </TEXTAREA> 
+&lt;#--相关日志--&gt; <TEXTAREA id=m-3-jst-6 name=jst> {list a as x} {if !!x} &lt;li class="thide"&gt;&lt;a class="fc03 m2a" href="${x.url|default:""}?fromdm" title="${x.title|default:""|escape}"&gt;${x.title|default:""|escape}&lt;/a&gt;&lt;/li&gt; {/if} {/list} &lt;li class="thide"&gt;&lt;a class="fc03 m2a" href="http://blog.163.com" title="博客首页"&gt;查看更多&gt;&gt;&lt;/a&gt;&lt;/li&gt; </TEXTAREA> 
+&lt;#--推荐日志--&gt; <TEXTAREA id=m-3-jst-7 name=jst> {list a as x} {if !!x} &lt;li class="thide"&gt;&lt;a class="fc03 m2a" href="http://blog.163.com/${x.userName}/${x.permalink}/" title="${x.title|default:""|escape}"&gt;${x.title|default:""|escape}&lt;/a&gt;&lt;/li&gt; {/if} {/list} </TEXTAREA> 
+&lt;#--右边模块结构--&gt; <TEXTAREA id=m-3-txt-0 name=txt> &lt;div class="uinfo ztag"&gt;&lt;/div&gt; &lt;h4 class="fc07 fs0 ltt"&gt;最新日志&lt;/h4&gt; &lt;ul class="ztag blst"&gt;&lt;/ul&gt; &lt;h4 class="fc07 fs0 ltt phide ztag"&gt;推荐日志&lt;/h4&gt; &lt;ul class="ztag blst"&gt;&lt;/ul&gt; &lt;h4 class="fc07 fs0 ltt phide ztag"&gt;相关日志&lt;/h4&gt; &lt;ul class="ztag blst"&gt;&lt;/ul&gt; </TEXTAREA> 
+&lt;#--评论模块结构--&gt; <TEXTAREA id=m-3-txt-1 name=txt> &lt;div class="publish ztag"&gt;&lt;/div&gt; &lt;div class="vgl ztag"&gt;&lt;a href="http://blog.163.com/blog_admin/blog/static/721279200911116513918/" target="_blank" class="fc07 m2a"&gt;《反低俗，文明上网通告》&lt;/a&gt;&lt;/div&gt; &lt;div class="ztag bdwt bds2 bdc0"&gt; &lt;div class="case"&gt;&lt;/div&gt; &lt;div class="clearfix"&gt;&lt;/div&gt; &lt;/div&gt; </TEXTAREA> 
+&lt;#--引用模块结构--&gt; <TEXTAREA id=m-3-txt-2 name=jst> &lt;div class="close"&gt; &lt;span class="ztag iblock icn0 icn0-57"&gt;&nbsp;&lt;/span&gt; &lt;/div&gt; &lt;div&gt; &lt;span class="iblock"&gt;－&lt;/span&gt; &lt;a target="_blank" class="noul ztag" href="${curl}"&gt;引用此篇日志到我的博客&lt;/a&gt; &lt;/div&gt; &lt;div class="ztag phide"&gt;&lt;/div&gt; &lt;div&gt; &lt;span class="iblock"&gt;－&lt;/span&gt; &lt;a href="javascript:return false;" class="ztag noul"&gt;复制此篇日志网址&lt;/a&gt; &lt;input class="ads ztag phide" type="text" /&gt; &lt;/div&gt; &lt;div&gt; &lt;span class="iblock"&gt;－&lt;/span&gt; &lt;span class="ztag"&gt;发送给博友&lt;/span&gt; &lt;/div&gt; </TEXTAREA> 
+</DIV></DIV>
+<DIV class="l cl h100"></DIV>
+<DIV class="r cr h100"></DIV></DIV>
+<DIV class="nb-mb lcr bh space">
+<DIV class="l bl bh"></DIV>
+<DIV class="r br bh"></DIV>
+<DIV class="c bc bh lcr"></DIV></DIV></DIV></DIV>
+<DIV class="l wl g lg h100"></DIV>
+<DIV class="l wl t lt"></DIV>
+<DIV class="l wl b lb"></DIV>
+<DIV class="r wr g rg h100"></DIV>
+<DIV class="r wr t rt"></DIV>
+<DIV class="r wr b rb"></DIV></DIV></DIV>
+<DIV class="nb-are nb-smb">
+<DIV class="wkg h space">
+<DIV class="l h"></DIV>
+<DIV class="r h"></DIV>
+<DIV class="c h">&nbsp;</DIV></DIV></DIV>
+<DIV class="nb-are nb-fot">
+<DIV class="wkg h">
+<H2>页脚</H2>
+<DIV class=k><A class="m2a fc08" href="http://corp.163.com/index_gb.html" 
+target=_blank>公司简介</A> <SPAN class="p fc10">-</SPAN> <A class="m2a fc08" 
+href="http://gb.corp.163.com/gb/contactus.html" target=_blank>联系方法</A> <SPAN 
+class="p fc10">-</SPAN> <A class="m2a fc08" 
+href="http://corp.163.com/gb/job/job.html" target=_blank>招聘信息</A> <SPAN 
+class="p fc10">-</SPAN> <A class="m2a fc08" href="http://help.163.com/?b13abk1" 
+target=_blank>客户服务</A> <SPAN class="p fc10">-</SPAN> <A class="m2a fc08" 
+href="http://corp.163.com/gb/legal/legal.html" target=_blank>相关法律</A> <LINK 
+title=RSS href="http://skpsun.blog.163.com/rss/" type=application/rss+xml 
+rel=alternate><SPAN class="p fc10">-</SPAN><A class="iblock noul icn1 icn1-0" 
+href="http://skpsun.blog.163.com/rss/" target=_blank>&nbsp;</A> </DIV>
+<P class=fc08>网易公司版权所有&nbsp;&copy;1997-2010</P></DIV></DIV></DIV>
+<DIV class="nb-bar wsy">
+<UL class="wkg clearfix" id=blog-163-com-topbar>
+  <LI class=pl><A class=fc00 href="http://www.163.com/?frompersonalbloghome" 
+  target=_blank>网易首页</A> <SPAN class="fc00 blg ztag"><LABEL><SPAN 
+  class=ul>网易博客</SPAN><SPAN 
+  class="iblock noul icn0 icn0-622">&nbsp;</SPAN></LABEL> 
+  <DIV class="nbw-win nbw-lnk nbw-tgl3 noul"><A class=itm hideFocus 
+  href="http://blog.163.com/?frompersonalbloghome" target=_blank>博客首页</A><A 
+  class=itm hideFocus href="http://pp.blog.163.com/?frompersonalbloghome" 
+  target=_blank>博客拍拍</A><A class=itm hideFocus 
+  href="http://blog.163.com/public/theme/?frompersonalbloghome" 
+  target=_blank>精美风格</A><A class=itm hideFocus 
+  href="http://q.163.com/#home?frompersonalbloghome" target=_blank>博客圈子</A><A 
+  class=itm hideFocus href="http://huodong.163.com/?frompersonalbloghome" 
+  target=_blank>博客活动</A><A class=itm hideFocus 
+  href="http://my.163.com/?frompersonalbloghome" target=_blank>娱乐中心</A><A 
+  class=itm hideFocus href="http://blog.163.com/ht/?frompersonalbloghome" 
+  target=_blank>博客话题</A> 
+  <DIV class="sep space bdc0 lhz"></DIV><A class=itm hideFocus 
+  href="http://blog.163.com/findFriend.do?type=5?frompersonalbloghome" 
+  target=_blank>找 朋 友</A><A class=itm hideFocus 
+  href="http://blog.163.com/clone/clone.html?frompersonalbloghome" 
+  target=_blank>博客复制</A><A class=itm hideFocus 
+  href="http://blog.163.com/services/wapblog.html?frompersonalbloghome" 
+  target=_blank>手机博客</A><A class=itm hideFocus 
+  href="http://blog.163.com/services/emsblog.html?frompersonalbloghome" 
+  target=_blank>短信写博</A> 
+  <DIV class="sep space bdc0 lhz"></DIV><A class=itm hideFocus 
+  href="http://feedback.163.com/fb/add/?productId=1" target=_blank>意见反馈</A> 
+  <DIV class="sep space bdc0 lhz"></DIV><A class=itm hideFocus 
+  href="http://blog.163.com/services/all.html?frompersonalbloghome" 
+  target=_blank>更多&gt;&gt;</A> </DIV></SPAN><INPUT class="ntxt bdc0 ztag"> <A 
+  class="fc00 ztag" href="http://blog.youdao.com/search?frompersonalsearch" 
+  target=_blank>搜 索</A> </LI>
+  <LI class=pr><SPAN class="fc00 ul ztag">登录</SPAN> <SPAN 
+  class="p fc10">|</SPAN> <A class=fc00 
+  href="http://reg.163.com/reg/reg0.jsp?url=http://blog.163.com/ntesRegBlank.html" 
+  target=_blank>注册</A> </LI></UL></DIV>
+<SCRIPT type=text/javascript>(function(){var e=document.getElementById('blog-163-com-main');if(!!e)e.parentNode.insertBefore(document.getElementById('blog-163-com-topbar').parentNode,e)})()</SCRIPT>
+<!--[if lte IE 6]></DIV><![endif]-->
+<DIV class=nb-layer id=blog-163-com-layer></DIV>
+<DIV class="nb-tpl nb-init phide" id=blog-163-com-template><TEXTAREA id=nb-jst-a1 name=jst rows=1 cols=1> &lt;a class="fc00" target="_blank" href="http://blog.163.com/activation.do?host=activation&amp;&amp;username=${u}"&gt;${u}&lt;/a&gt; &lt;span class="p fc10"&gt;|&lt;/span&gt; &lt;a class="fc00" target="_blank" href="http://help.163.com/special/007525FT/blog.html?b13aze1"&gt;帮助&lt;/a&gt; </TEXTAREA> 
+</DIV>
+<SCRIPT type=text/javascript> window.N = {tm:{'zbtn':'nbtn', 'bdc0':'bdc0','bdc2':'bdc1', 'bgc0':'bgc0','bgc1':'bgc1','bgc2':'bgc2','bgh0':'bgc9', 'fc00':'fc03','fc01':'fc04','fc02':'fc05','fc03':'fc06','fc04':'fc07','fc05':'fc09'}}; location.api = 'http://api.blog.163.com/'; location.dwr = 'http://api.blog.163.com/skpsun/dwr'; location.vcd = 'http://api.blog.163.com/cap/captcha.jpgx?parentId=2760055&r='; location.mrt = 'http://b.bst.126.net/newpage/style/mbox/'; location.fce = 'http://os.blog.163.com/common/ava.s?host='; location.fpr = 'http://b.bst.126.net/common/portrait/face/preview/'; location.f60 = 'http://b.bst.126.net/common/face60.png'; location.f140= 'http://b.bst.126.net/common/face140.png'; location.ept = 'http://b.bst.126.net/common/empty.png'; location.guide_profile_add= 'http://b.bst.126.net/common/guide_profile_add.gif'; window.CF = { ca:false ,cb:'' ,cc:false ,cd:false ,ce:'-3' ,ck:0 ,ci:['api.blog.163.com' ,'http://photo.163.com/photo/html/crossdomain.html?t=20100205' ,'ud.blog.163.com' ] ,cj:[-3] ,cl:'' ,cm:['','blog/','album/','music/','collection/','friends/','profile/'] ,cf:0 ,co:{pv:false ,ti:4080 ,tn:'' ,tc:0 ,tl:3 ,ut:0 ,un:'' ,um:'' ,ui:0 ,ud:false} ,cp:{nr:0 ,cr:0 ,fr:0} }; window.UD = {}; UD.host = { userId:2760055, userName:'skpsun', nickName:'freetrain_sk', baseUrl:'http://skpsun.blog.163.com/', gender:'他' }; </SCRIPT>
+
+<SCRIPT 
+src="Linux下的motion detection（最简单的办公室监控系统） - freetrain_sk的日志 - 网易博客.files/pc.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT 
+src="Linux下的motion detection（最简单的办公室监控系统） - freetrain_sk的日志 - 网易博客.files/pm.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT 
+src="Linux下的motion detection（最简单的办公室监控系统） - freetrain_sk的日志 - 网易博客.files/ntes.js" 
+type=text/javascript></SCRIPT>
+
+<SCRIPT type=text/javascript> _ntes_nacc='blog';neteaseTracker(); document.write('<img style="display:none;" src="http://blog.163.com/newpage/images/analyse.png?s=p&t='+(new Date().getTime())+'"/>'); </SCRIPT>
+</BODY></HTML>

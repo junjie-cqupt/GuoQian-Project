@@ -1,0 +1,189 @@
+BODY {
+	COLOR: #788c67
+}
+.fc00 {
+	COLOR: #ffffff
+}
+.fc01 {
+	COLOR: #c56f00
+}
+.fc02 {
+	COLOR: #d77900
+}
+.fc02 A {
+	COLOR: #d77900
+}
+.fc03 {
+	COLOR: #396e00
+}
+.fc03 A {
+	COLOR: #396e00
+}
+.fc11 A {
+	COLOR: #396e00
+}
+.fc04 {
+	COLOR: #b2ad5e
+}
+.fc04 A {
+	COLOR: #b2ad5e
+}
+.fc05 {
+	COLOR: #676615
+}
+.fc06 {
+	COLOR: #353527
+}
+.fc07 {
+	COLOR: #484848
+}
+.fc08 {
+	COLOR: #4d503c
+}
+.fc09 {
+	COLOR: #ffffff
+}
+.fc10 {
+	COLOR: #134500
+}
+.bdc0 {
+	BORDER-LEFT-COLOR: #134500; BORDER-BOTTOM-COLOR: #134500; BORDER-TOP-COLOR: #134500; BORDER-RIGHT-COLOR: #134500
+}
+.bdc1 {
+	BORDER-LEFT-COLOR: #ffffff; BORDER-BOTTOM-COLOR: #ffffff; BORDER-TOP-COLOR: #ffffff; BORDER-RIGHT-COLOR: #ffffff
+}
+.bdc9t {
+	BORDER-TOP-COLOR: #f9f8f7
+}
+.bdc9r {
+	BORDER-RIGHT-COLOR: #f9f8f7
+}
+.bdc9b {
+	BORDER-BOTTOM-COLOR: #f9f8f7
+}
+.bdc9l {
+	BORDER-LEFT-COLOR: #f9f8f7
+}
+.bgc0 {
+	BACKGROUND-COLOR: #e8e7e6
+}
+.bgc9:hover {
+	BACKGROUND-COLOR: #e8e7e6
+}
+.js-bgc9-hover {
+	BACKGROUND-COLOR: #e8e7e6
+}
+.bgc1 {
+	BACKGROUND-COLOR: #f9f8f7
+}
+.bgc2 {
+	BACKGROUND-COLOR: #869e4b
+}
+.bgp0 {
+	BACKGROUND-IMAGE: url(img/-1.gif)
+}
+.nb-body {
+	BACKGROUND: #779051
+}
+.nb-wrap {
+	BACKGROUND: url(img/banner01.jpg) no-repeat
+}
+.nb-bar {
+	BACKGROUND: #869e4b
+}
+.nb-top .h {
+	HEIGHT: 215px
+}
+.nb-top .t {
+	FONT-SIZE: 14px; LEFT: 550px; COLOR: #4d0000; FONT-FAMILY: Verdana,Arial,Helvetica,sans-serif; TOP: 130px
+}
+.nb-top .n {
+	FONT-SIZE: 26px
+}
+.nb-nav .h {
+	LINE-HEIGHT: 65px; HEIGHT: 51px
+}
+.nb-nav .l {
+	WIDTH: 520px
+}
+.nb-nav .r {
+	WIDTH: 40px
+}
+.nb-nav .c {
+	MARGIN: 0px 40px 0px 520px
+}
+.nb-nav .i {
+	FONT-WEIGHT: bold; FONT-SIZE: 14px
+}
+.nb-nav .i:hover {
+	FONT-WEIGHT: bold; FONT-SIZE: 14px; COLOR: #7a350a
+}
+.nb-nav .selected {
+	BACKGROUND: url(img/bt.gif) no-repeat 50% bottom
+}
+.nb-nav .selected .i {
+	FONT-WEIGHT: bold; FONT-SIZE: 16px; COLOR: #7a350a
+}
+.nb-nav .selected .i:hover {
+	FONT-WEIGHT: bold; FONT-SIZE: 16px; COLOR: #7a350a
+}
+.nb-smt {
+	DISPLAY: block; BACKGROUND: url(img/banner02.jpg) no-repeat
+}
+.nb-smt .h {
+	HEIGHT: 25px
+}
+.nb-cnt {
+	BACKGROUND: url(img/bk.jpg) no-repeat
+}
+.nb-cnt .wc {
+	MARGIN: 0px 18px
+}
+.nb-smb {
+	DISPLAY: none
+}
+.nb-fot .h {
+	HEIGHT: 100px
+}
+.nb-fot .k {
+	PADDING-TOP: 10px
+}
+.nb-mdl {
+	BORDER-RIGHT: #000000 1px; BORDER-TOP: #000000 1px; MARGIN: 10px 5px; BORDER-LEFT: #000000 1px; BORDER-BOTTOM: #000000 1px
+}
+.nb-mdl .th {
+	LINE-HEIGHT: 40px; HEIGHT: 37px
+}
+.nb-mdl .bh {
+	HEIGHT: 10px
+}
+.nb-mt .tl {
+	BACKGROUND: url(img/topleft.gif) no-repeat; WIDTH: 34px
+}
+.nb-mt .tc {
+	FONT-WEIGHT: bold; FONT-SIZE: 14px; BACKGROUND: url(img/topmiddle.gif) repeat-x; MARGIN: 0px 35px 0px 34px
+}
+.nb-mt .tr {
+	BACKGROUND: url(img/topright.gif) no-repeat; WIDTH: 35px
+}
+.nb-mc .cl {
+	BACKGROUND: url(img/middleleft.gif) repeat-y; WIDTH: 3px
+}
+.nb-mc .cc {
+	BACKGROUND: #f9f8f7; MARGIN: 0px 4px 0px 3px
+}
+.nb-mc .cr {
+	BACKGROUND: url(img/middleright.gif) repeat-y; WIDTH: 4px
+}
+.nb-mb {
+	DISPLAY: block
+}
+.nb-mb .bl {
+	BACKGROUND: url(img/bottomleft.gif) no-repeat; WIDTH: 5px
+}
+.nb-mb .bc {
+	BACKGROUND: url(img/bottommiddle.gif) repeat-x; MARGIN: 0px 6px 0px 5px
+}
+.nb-mb .br {
+	BACKGROUND: url(img/bottomright.gif) no-repeat; WIDTH: 6px
+}

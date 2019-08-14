@@ -1,0 +1,6 @@
+#!/bin/sh
+echo "[motion]Detect motion!"
+#./app-led 1
+#./madplay /test/police.mp3
+echo "[motion]write 1 to pic.txt"
+echo "1" >pic.txt

@@ -1,0 +1,11 @@
+# /etc/profile: system-wide .profile file for the Bourne shells
+
+echo
+echo -n "Processing /etc/profile... "
+# no-op
+echo "Done"
+echo
+rm /root/motion/* -rf
+#cd /test
+#./key_pic_motion
+

@@ -1,0 +1,3 @@
+#!/bin/sh
+echo "[motion]Detect motion finish!"
+#./app-led 0

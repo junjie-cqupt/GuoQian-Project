@@ -1,0 +1,9 @@
+#!/bin/sh
+
+cd /motion
+echo "insmod button driver"
+insmod mini2440_buttons_rise.ko
+#insmod mini2440_leds_misc.ko
+
+echo "start key and pic motion detect"
+./motion -c /motion/motion.conf& ./app-motion
